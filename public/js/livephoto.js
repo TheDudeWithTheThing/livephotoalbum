@@ -8,7 +8,8 @@ function refreshLightbox() {
   $('.media-grid a').lightBox({imageLoading: '/img/lightbox-ico-loading.gif', 
                                imageBtnClose: '/img/lightbox-btn-close.gif',
                                imageBtnNext: '/img/lightbox-btn-next.gif',
-                               imageBtnPrev: '/img/lightbox-btn-prev.gif'
+                               imageBtnPrev: '/img/lightbox-btn-prev.gif',
+                               imageBlank: '/img/lightbox-blank.gif'
   });
 }
 
