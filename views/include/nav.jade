@@ -1,0 +1,10 @@
+div.topbar
+  div.fill
+    div.container
+      a(href="/", class="brand") Live Photo Album
+      ul.nav
+        li
+          - if (!everyauth.loggedIn)
+            a(href="/login") Login
+          else
+            a(href="/logout") Logout #{everyauth.user.display_name}

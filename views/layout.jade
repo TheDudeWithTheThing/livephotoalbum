@@ -1,0 +1,33 @@
+!!! 5
+html
+  head
+    // meta info
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+    meta(name="description", content="")
+    meta(name="author", content="Shaun Butler")
+    meta(name="viewport", content="width=device-width,initial-scale=1")
+
+
+    // css
+    //link(href="/stylesheets/cupertino/jquery-ui-1.8.16.custom.css", type="text/css", media="screen", rel="stylesheet")
+    //link(href="/stylesheets/workless.css", type="text/css", media="screen", rel="stylesheet")
+    link(href="/css/bootstrap.min.css", type="text/css", media="screen", rel="stylesheet")
+    link(href="/css/jquery.lightbox-0.5.css", type="text/css", media="screen", rel="stylesheet")
+    link(href="/css/style.css", type="text/css", media="screen", rel="stylesheet")
+    
+    // web font
+    //|<link href='http://fonts.googleapis.com/css?family=Amatic+SC' rel='stylesheet' type='text/css'>
+
+    // js files
+    |<script src="/js/jquery-1.7.1.min.js"></script>
+    |<script src="/js/bootstrap-alerts.min.js"></script>
+    |<script src="/socket.io/socket.io.js"></script>
+    |<script src="/js/livephoto.js"></script>
+    |<script src="/js/jquery.lightbox-0.5.min.js"></script>
+
+    title #{title}
+  body
+    include include/nav
+    !=body
+

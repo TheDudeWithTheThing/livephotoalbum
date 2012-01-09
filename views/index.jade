@@ -1,0 +1,15 @@
+div.container
+  div.hero-unit
+    div.row
+      label.span3 URL to image: 
+      input(type="text", class="span8", name="url", id="url")
+    div.row 
+      button(class="offset3 span4 btn primary", id="go_button", value="Go!") Go!
+
+p.left-pad
+  ul.media-grid
+    each img in images
+      li
+        a(href="#{img.src}", title="Added by #{img.owner}")
+          img(class="thumbnail span2",src="#{img.src}")
+
