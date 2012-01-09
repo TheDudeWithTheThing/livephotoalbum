@@ -24,7 +24,7 @@ $(document).ready( function() {
   });
 
   socket.on('not_logged_in', function() {
-    alertMessage("Must be logged in for posting n00dz");
+    alertMessage("Must be logged in for posting pics.");
   });
 
   socket.on('no_data', function() {
