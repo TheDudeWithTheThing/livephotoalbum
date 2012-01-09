@@ -1,6 +1,6 @@
 {
   "name" : "livephotoalubm",
-  "description" : "Just a small project written in node to play with web sockets. For all users looking at the page, whenever a user adds an image it is broadcast and shown to all users.",
+  "description" : "Just a small node.js with mongodb project to play with web sockets. For all users looking at the page, whenever a user adds an image it is broadcast and shown to all users.",
   "version" : "1.0",
   "homepage" : "https://github.com/thedudewiththething/livephotoalbum",
   "repository" : {
