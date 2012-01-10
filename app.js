@@ -99,14 +99,14 @@ io.sockets.on('connection', function(socket) {
   if (session.auth && session.auth.loggedIn)
   {
     currentUserFactory.find({user_id: user._id}).run( function(err, foundUser) {
-      console.log(foundUser);
       if(!foundUser.length) {
+        console.log(user);
         var currentUser = new currentUserFactory({name: user.display_name, user_id: user._id});
         currentUser.save( function(err) {
           if(err) console.log(err);
 
-          socket.broadcast.emit('connect_rcv', user.display_name);
-          socket.emit('connect_rcv', user.display_name);
+          socket.broadcast.emit('connect_rcv', {id: 'u' + user._id, name: user.display_name});
+          socket.emit('connect_rcv', {id: 'u' + user._id, name: user.display_name});
         });
       }
     });
@@ -116,7 +116,8 @@ io.sockets.on('connection', function(socket) {
     if (session.auth && session.auth.loggedIn) {
       currentUserFactory.remove({user_id: user._id}, function(err) {
         if(err) console.log(err);
-        socket.broadcast.emit('disconnect_rcv', user.display_name);
+
+        socket.broadcast.emit('disconnect_rcv', {id: 'u' + user._id, name: user.display_name});
       });
     }
   });

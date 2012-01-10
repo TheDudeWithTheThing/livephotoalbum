@@ -4,11 +4,11 @@ function addImage( d ) {
 
 function addUser( u ) {
     removeUser(u);
-    $('.user_list').append('<li id="' + u + '">' + u + '</li>');
+    $('.user_list').append('<li id="' + u.id + '">' + u.name + '</li>');
 }
 
 function removeUser(u) {
-  $('#'+u).remove();
+  $('#' + u.id).remove();
 }
 
 function addChat( c ) {
