@@ -3,15 +3,17 @@ function addImage( d ) {
 }
 
 function addUser( u ) {
-    $('#'+u).remove();
+    removeUser(u);
     $('.user_list').append('<li id="' + u + '">' + u + '</li>');
+}
+
+function removeUser(u) {
+  $('#'+u).remove();
 }
 
 function addChat( c ) {
   var msg = '&lt;' + c.user + '> ' + c.msg + '<br/>';
   $('#chat_window').append(msg);
-
-  console.log(  $('#chat_window').prop('scrollHeight') );
   $('#chat_window').scrollTop( $('#chat_window').prop('scrollHeight') );
 }
 
@@ -49,6 +51,10 @@ $(document).ready( function() {
 
     socket.on('connect_rcv', function(user) {
       addUser(user); 
+    });
+
+    socket.on('disconnect_rcv', function(user) {
+      removeUser(user);
     });
 
     socket.on('chat_send', function(msg) {

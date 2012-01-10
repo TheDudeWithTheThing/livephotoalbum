@@ -95,6 +95,12 @@ io.sockets.on('connection', function(socket) {
     socket.emit('connect_rcv', user.display_name);
   }
 
+  socket.on('disconnect', function() {
+    if (session.auth && session.auth.loggedIn) {
+      socket.broadcast.emit('disconnect_rcv', user.display_name);
+    }
+  });
+
   socket.on('get_pic', function(data) {
     if (!data) {
       socket.emit('no_data');
@@ -110,6 +116,9 @@ io.sockets.on('connection', function(socket) {
 
       socket.broadcast.emit('new_pic', d);
       socket.emit('new_pic', d);
+
+      socket.broadcast.emit('chat_send', {user: user.display_name, msg: 'just uploaded photo ' + data});
+      socket.emit('chat_send', {user: user.display_name, msg: 'just uploaded photo ' + data});
     } 
     else {
       socket.emit('not_logged_in');
