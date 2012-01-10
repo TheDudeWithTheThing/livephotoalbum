@@ -5,18 +5,15 @@ function addImage( d ) {
 function addUser( u ) {
     removeUser(u);
 
-    console.log('add    ' + u.id);
     $('.user_list').append('<li id="' + u.id + '">' + u.name + '</li>');
 }
 
 function removeUser(u) {
-  console.log('remove ' + u.id);
   $('#' + u.id).remove();
 }
 
-function addChat( c ) {
-  var msg = '&lt;' + c.user + '> ' + c.msg + '<br/>';
-  $('#chat_window').append(msg);
+function addChat(msg, styl) {
+  $('#chat_window').append('<span class="' + styl + '">' + msg + '</span><br/>');
   $('#chat_window').scrollTop( $('#chat_window').prop('scrollHeight') );
 }
 
@@ -30,6 +27,7 @@ function refreshLightbox() {
 }
 
 function alertMessage(msg) {
+  $('.alert-message').remove();
   $('.topbar').after('<div class="alert-message error">' + msg + '</div>');    
 }
 
@@ -48,20 +46,22 @@ $(document).ready( function() {
     });
 
     socket.on('no_data', function() {
-      $('.alert-message').remove();
       alertMessage("Enter some datas");
     });
 
     socket.on('connect_rcv', function(user) {
+      addChat('*** ' + user.name + ' connected', 'connect');
       addUser(user); 
     });
 
     socket.on('disconnect_rcv', function(user) {
+      addChat('*** ' + user.name + ' disconnected', 'disconnect');
       removeUser(user);
     });
 
     socket.on('chat_send', function(msg) {
-      addChat(msg);
+      var chat = '&lt;' + msg.user + '> ' + msg.msg;
+      addChat(chat);
     });
 
     $('#go_button').click( function(ev) {

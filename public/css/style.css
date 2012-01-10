@@ -28,3 +28,9 @@ body {
   max-height: 250px;
   min-height: 250px;
 }
+.connect {
+  color: #008000;
+}
+.disconnect {
+  color: #f00;
+}
