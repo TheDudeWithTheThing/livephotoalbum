@@ -5,6 +5,7 @@ var conf = require('./conf'),
     mongoStore = require('./lib/mongostore'),
     userSchema = require('./model/user'), 
     pictureSchema = require('./model/picture'),
+    currentUserSchema = require('./model/current_user'),
     fs = require('fs'), 
     path = require('path'), 
     dateformat = require('dateformat'),
@@ -20,7 +21,8 @@ var app = express.createServer(
     io = require('socket.io').listen(app),
     db = mongoose.createConnection('mongodb://'+conf.db.host + '/' + conf.db.schema),
     userFactory = db.model('User', userSchema),
-    pictureFactory = db.model('Picture', pictureSchema);
+    pictureFactory = db.model('Picture', pictureSchema),
+    currentUserFactory = db.model('CurrentUser', currentUserSchema);
 
 app.configure(function() {
   app.set('view engine', 'jade');
@@ -34,7 +36,12 @@ app.configure('development', function() {
 
 app.get('/', function(req, res) {
   pictureFactory.find({}).sort('createdAt', -1).limit(10).run(function(err, images) {
-    res.render('index', {title : 'Home Page', images: images, conf: conf });
+    if (err) console.log(err);
+
+    currentUserFactory.find({}).run(function(err, users) {
+      if (err) console.log(err);
+      res.render('index', {title : 'Home Page', images: images, conf: conf, users: users });
+    });
   });
 });
 
@@ -91,13 +98,26 @@ io.sockets.on('connection', function(socket) {
   // someone connected, need to add to list
   if (session.auth && session.auth.loggedIn)
   {
-    socket.broadcast.emit('connect_rcv', user.display_name);
-    socket.emit('connect_rcv', user.display_name);
+    currentUserFactory.find({user_id: user._id}).run( function(err, foundUser) {
+      console.log(foundUser);
+      if(!foundUser.length) {
+        var currentUser = new currentUserFactory({name: user.display_name, user_id: user._id});
+        currentUser.save( function(err) {
+          if(err) console.log(err);
+
+          socket.broadcast.emit('connect_rcv', user.display_name);
+          socket.emit('connect_rcv', user.display_name);
+        });
+      }
+    });
   }
 
   socket.on('disconnect', function() {
     if (session.auth && session.auth.loggedIn) {
-      socket.broadcast.emit('disconnect_rcv', user.display_name);
+      currentUserFactory.remove({user_id: user._id}, function(err) {
+        if(err) console.log(err);
+        socket.broadcast.emit('disconnect_rcv', user.display_name);
+      });
     }
   });
 

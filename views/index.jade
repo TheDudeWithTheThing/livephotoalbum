@@ -2,6 +2,8 @@ div.container.chat_container
   div.container-fluid
     div.sidebar
       ul.unstyled.user_list
+        each u in users
+          li(id='#{u.name}') #{u.name}
     div#chat_window.content
 
 div.container
