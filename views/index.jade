@@ -1,10 +1,19 @@
+div.container.chat_container
+  div.container-fluid
+    div.sidebar
+      ul.unstyled.user_list
+    div#chat_window.content
+
 div.container
-  div.hero-unit
-    div.row
-      label.span3 URL to image: 
-      input(type="text", class="span8", name="url", id="url")
-    div.row 
-      button(class="offset3 span4 btn primary", id="go_button", value="Go!") Go!
+  div.row
+    label.span1 Chats: 
+    input(type="text", name="chat_msg", id="chat_msg", class="span8", placeholder="Chat! press return to send") 
+  div.row.headroom
+    label.span1 URL to image: 
+    input(type="text", class="span8", name="url", id="url")
+    button(class="span2 btn primary", id="go_button", value="Go!") Go!
+
+hr.headroom
 
 p.left-pad
   ul.media-grid
@@ -13,3 +22,4 @@ p.left-pad
         a(href="#{img.src}", title="Added by #{img.owner}")
           img(class="thumbnail span2",src="#{img.src}")
 
+script(type="text/javascript") var socket = io.connect('#{conf.hostname}');

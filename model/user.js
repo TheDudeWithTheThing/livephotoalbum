@@ -50,17 +50,14 @@ UserSchema.virtual('display_name').get(function() {
   
   if(this.google.id)
   {
-    console.log('!!!googs');
     return this.google.name.first;
   }
 
   if(this.twit.id) {
-    console.log('!!!twit');
     return this.twit.name;
   }
 
   if(this.fb.id) {
-    console.log('!!!fb');
     return this.fb.name.first;
   }
 

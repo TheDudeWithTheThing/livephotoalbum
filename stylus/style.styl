@@ -1,5 +1,31 @@
+user_list_width = 70px
+
 body
   padding 60px 20px 0px 20px
 
 .header
   margin-bottom 20px
+
+.container-fluid
+  max-width 800px
+  min-width 800px
+
+.container-fluid > .sidebar
+  max-width user_list_width
+  width user_list_width
+
+.container-fluid > .content
+  margin-left user_list_width
+
+.chat_container
+  max-height 250px
+  min-height 250px
+
+.headroom
+  margin-top 30px 
+
+#chat_window
+  overflow-y scroll
+  overflow-x auto
+  max-height 250px
+  min-height 250px

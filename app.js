@@ -34,7 +34,7 @@ app.configure('development', function() {
 
 app.get('/', function(req, res) {
   pictureFactory.find({}).sort('createdAt', -1).limit(10).run(function(err, images) {
-    res.render('index', {title : 'Home Page', images: images });
+    res.render('index', {title : 'Home Page', images: images, conf: conf });
   });
 });
 
@@ -88,6 +88,13 @@ io.sockets.on('connection', function(socket) {
   var session = socket.handshake.session;
   var user = socket.handshake.user;
 
+  // someone connected, need to add to list
+  if (session.auth && session.auth.loggedIn)
+  {
+    socket.broadcast.emit('connect_rcv', user.display_name);
+    socket.emit('connect_rcv', user.display_name);
+  }
+
   socket.on('get_pic', function(data) {
     if (!data) {
       socket.emit('no_data');
@@ -106,6 +113,22 @@ io.sockets.on('connection', function(socket) {
     } 
     else {
       socket.emit('not_logged_in');
+    }
+  });
+
+  socket.on('chat_rcv', function(data) {
+    if (data !== '')
+    {
+      if(session.auth && session.auth.loggedIn) {
+        socket.broadcast.emit('chat_send', {user: user.display_name, msg: data});
+        socket.emit('chat_send', {user: user.display_name, msg: data});
+      }
+      else {
+        socket.emit('not_logged_in');
+      }
+    }
+    else {
+      socket.emit('no_data');
     }
   });
 });

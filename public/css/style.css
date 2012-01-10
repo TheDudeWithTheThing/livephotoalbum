@@ -4,3 +4,27 @@ body {
 .header {
   margin-bottom: 20px;
 }
+.container-fluid {
+  max-width: 800px;
+  min-width: 800px;
+}
+.container-fluid > .sidebar {
+  max-width: 70px;
+  width: 70px;
+}
+.container-fluid > .content {
+  margin-left: 70px;
+}
+.chat_container {
+  max-height: 250px;
+  min-height: 250px;
+}
+.headroom {
+  margin-top: 30px;
+}
+#chat_window {
+  overflow-y: scroll;
+  overflow-x: auto;
+  max-height: 250px;
+  min-height: 250px;
+}

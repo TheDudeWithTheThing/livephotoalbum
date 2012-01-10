@@ -1,7 +1,18 @@
-var socket = io.connect(location.href);
-
 function addImage( d ) {
     $('.media-grid').children(':first').before('<li><a href="' + d.src + '" title="Added by ' + d.owner + '"><img class="thumbnail span2" src="' + d.src + '"/></a></li>');
+}
+
+function addUser( u ) {
+    $('#'+u).remove();
+    $('.user_list').append('<li id="' + u + '">' + u + '</li>');
+}
+
+function addChat( c ) {
+  var msg = '&lt;' + c.user + '> ' + c.msg + '<br/>';
+  $('#chat_window').append(msg);
+
+  console.log(  $('#chat_window').prop('scrollHeight') );
+  $('#chat_window').scrollTop( $('#chat_window').prop('scrollHeight') );
 }
 
 function refreshLightbox() {
@@ -18,28 +29,51 @@ function alertMessage(msg) {
 }
 
 $(document).ready( function() {
-
-  socket.on('new_pic', function (data) {
-    addImage(data);
-    refreshLightbox();
-  });
-
-  socket.on('not_logged_in', function() {
-    alertMessage("Must be logged in for posting pics.");
-  });
-
-  socket.on('no_data', function() {
-    alertMessage("Enter some datas");
-  });
-
-  $('#go_button').click( function(ev) {
-    $('.alert-message').remove();
-    var img = $('#url').val();
-    socket.emit('get_pic', img);
-    $('#url').val('');
-  });
-
-  refreshLightbox();
+ 
+  // only do this stuff if we have a valid socket
   
+  if(socket) {
+    socket.on('new_pic', function (data) {
+      addImage(data);
+      refreshLightbox();
+    });
+
+    socket.on('not_logged_in', function() {
+      alertMessage("Not logged in");
+    });
+
+    socket.on('no_data', function() {
+      $('.alert-message').remove();
+      alertMessage("Enter some datas");
+    });
+
+    socket.on('connect_rcv', function(user) {
+      addUser(user); 
+    });
+
+    socket.on('chat_send', function(msg) {
+      addChat(msg);
+    });
+
+    $('#go_button').click( function(ev) {
+      $('.alert-message').remove();
+      var img = $('#url').val();
+      socket.emit('get_pic', img);
+      $('#url').val('');
+    });
+
+    $('#chat_msg').keydown( function(ev) {
+      // return pressed
+      if (ev.which == '13')
+      {
+        $('.alert-message').remove();
+        var chats = $('#chat_msg').val();
+        socket.emit('chat_rcv', chats);
+        $('#chat_msg').val('');
+      }
+    });
+
+    refreshLightbox();
+  }
 });
 
