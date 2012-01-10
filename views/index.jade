@@ -3,7 +3,7 @@ div.container.chat_container
     div.sidebar
       ul.unstyled.user_list
         each u in users
-          li(id='u#{u._id}') #{u.name}
+          li(id='u#{u.user_id}') #{u.name}
     div#chat_window.content
 
 div.container

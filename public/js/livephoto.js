@@ -4,10 +4,13 @@ function addImage( d ) {
 
 function addUser( u ) {
     removeUser(u);
+
+    console.log('add    ' + u.id);
     $('.user_list').append('<li id="' + u.id + '">' + u.name + '</li>');
 }
 
 function removeUser(u) {
+  console.log('remove ' + u.id);
   $('#' + u.id).remove();
 }
 
