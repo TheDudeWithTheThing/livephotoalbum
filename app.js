@@ -34,7 +34,7 @@ app.configure('development', function() {
 
 app.get('/', function(req, res) {
   pictureFactory.find({}).sort('createdAt', -1).limit(10).run(function(err, images) {
-    res.render('index', {title : 'Home Page', images: images || {}});
+    res.render('index', {title : 'Home Page', images: images });
   });
 });
 

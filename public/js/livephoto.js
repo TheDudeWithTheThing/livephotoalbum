@@ -1,4 +1,4 @@
-var socket = io.connect('http://dev.sbutler.org:3000');
+var socket = io.connect(location.href);
 
 function addImage( d ) {
     $('.media-grid').children(':first').before('<li><a href="' + d.src + '" title="Added by ' + d.owner + '"><img class="thumbnail span2" src="' + d.src + '"/></a></li>');
