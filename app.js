@@ -100,7 +100,6 @@ io.sockets.on('connection', function(socket) {
   {
     currentUserFactory.find({user_id: user._id}).run( function(err, foundUser) {
       if(!foundUser.length) {
-        console.log(user);
         var currentUser = new currentUserFactory({name: user.display_name, user_id: user._id});
         currentUser.save( function(err) {
           if(err) console.log(err);
