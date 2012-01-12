@@ -39,6 +39,6 @@ Install locally
 
   `npm install`
   
-  Next change the values in the conf.js file. 
+  Next change the values in the conf.js file and then start her up!
 
   `node app.js`
