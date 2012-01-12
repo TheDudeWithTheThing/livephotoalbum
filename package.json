@@ -10,17 +10,16 @@
   "author" : "Shaun Butler (https://github.com/thedudewiththething)",
   "keywords" : ['node', 'socket.io'],
   "dependencies" : {
-    "connect" : ">=1.8.5",
-    "connect-form" : ">=0.2.1",
-    "everyauth" : ">=0.2.28",
-    "express" : ">=2.5.1",
-    "jade" : ">=0.20.0",
-    "mongodb" : ">=0.9.7-1.4",
-    "mongoose" : ">=2.3.12",
-    "mongoose-auth" : "0.0.11",
-    "mongoose-types" : ">=1.0.3",
-    "qs" : ">=0.4.0",
-    "socket.io" : ">=0.8.7"
+    "connect" : "1.8.5",
+    "connect-form" : "0.2.1",
+    "everyauth" : "0.2.28",
+    "express" : "2.5.1",
+    "jade" : "0.20.0",
+    "mongodb" : "0.9.7-1.4",
+    "mongoose" : "2.3.12",
+    "mongoose-types" : "1.0.3",
+    "qs" : "0.4.0",
+    "socket.io" : "0.8.7"
   },
   "engines" : {
     "node" : ">=0.4"

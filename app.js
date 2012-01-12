@@ -195,4 +195,4 @@ io.set('authorization', function (data, accept) {
 mongooseAuth.helpExpress(app);
 console.log("running");
 
-app.listen(3000);
+app.listen(conf.port);
