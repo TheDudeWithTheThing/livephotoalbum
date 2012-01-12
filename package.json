@@ -1,34 +1,31 @@
 {
   "name": "livephotoalubm",
-  "description": "Just a small node.js with mongodb project to play with web sockets. For all users looking at the page, whenever a user adds an image it is broadcast and shown to all users.",
-  "version": "1.0",
-  "homepage": "https://github.com/thedudewiththething/livephotoalbum",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/TheDudeWithTheThing/livephotoalbum.git"
-  },
-  "author": "Shaun Butler (https://github.com/thedudewiththething)",
-  "keywords": [
-    'node', 
-    'socket.io'
-  ],
-  "main": "./app.js",
-  "directories": {
-    "lib": "lib"
-  },
-  "dependencies": {
-    "connect": "1.8.5",
-    "connect-form": "0.2.1",
-    "everyauth": "0.2.28",
-    "express": "2.5.1",
-    "jade": "0.20.0",
-    "mongodb": "0.9.7-1.4",
-    "mongoose": "2.3.12",
-    "mongoose-types": "1.0.3",
-    "qs": "0.4.0",
-    "socket.io": "0.8.7"
-  },
-  "engines": {
-    "node": ">=0.4"
-  }
+    "description": "Just a small node.js with mongodb project to play with web sockets. For all users looking at the page, whenever a user adds an image it is broadcast and shown to all users.",
+    "version": "0.0.1",
+    "homepage": "https://github.com/thedudewiththething/livephotoalbum",
+    "author": "Shaun Butler <shaun.butler@gmail.com> (https://github.com/thedudewiththething)",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/TheDudeWithTheThing/livephotoalbum.git"
+    },
+    "dependencies": {
+      "connect": ">=1.8.5",
+      "connect-form": ">=0.2.1",
+      "everyauth": ">=0.2.28",
+      "express": ">=2.5.1",
+      "jade": ">=0.20.0",
+      "mongodb": ">=0.9.7-1.4",
+      "mongoose": ">=2.3.12",
+      "mongoose-types": ">=1.0.3",
+      "qs": ">=0.4.0",
+      "socket.io": ">=0.8.7",
+      "zlib": ">=1.0.5"
+    },
+    "devDependencies": {
+      "express": ">=2.3.10",
+      "jade": ">=0.12.1"
+    },
+    "engines": {
+      "node": ">=0.4"
+    }
 }

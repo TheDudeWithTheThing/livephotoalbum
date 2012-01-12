@@ -42,3 +42,7 @@ Install locally
   Next change the values in the conf.js file and then start her up!
 
   `node app.js`
+
+  And then to watch the .styl file and compile to public dir use the command 
+
+  `stylus -w stylus/ -o public/css`
