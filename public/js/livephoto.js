@@ -1,5 +1,5 @@
 function addImage( d ) {
-    $('.media-grid').children(':first').before('<li><a href="' + d.src + '" title="Added by ' + d.owner + '"><img class="thumbnail span2" src="' + d.src + '"/></a></li>');
+    $('.media-grid').children(':first').before('<li><a class="span2 new_img" href="' + d.src + '" title="Added by ' + d.owner + '"><img class="thumbnail" src="' + d.src + '"/></a></li>');
 }
 
 function addUser( u ) {
@@ -24,6 +24,12 @@ function refreshLightbox() {
                                imageBtnPrev: '/img/lightbox-btn-prev.gif',
                                imageBlank: '/img/lightbox-blank.gif'
   });
+
+  $('img.thumbnail').imgCenter({scaleToFit: false, parentSteps: 0});
+
+  $('.new_img').click( function(ev) {
+    $(this).removeClass('new_img');
+  });
 }
 
 function alertMessage(msg) {
@@ -34,7 +40,6 @@ function alertMessage(msg) {
 $(document).ready( function() {
  
   // only do this stuff if we have a valid socket
-  
   if(socket) {
     socket.on('new_pic', function (data) {
       addImage(data);

@@ -1,14 +1,11 @@
 user_list_width = 70px
+chat_window_height = 350px
 
 body
   padding 60px 20px 0px 20px
 
 .header
   margin-bottom 20px
-
-.container-fluid
-  max-width 800px
-  min-width 800px
 
 .container-fluid > .sidebar
   max-width user_list_width
@@ -17,9 +14,8 @@ body
 .container-fluid > .content
   margin-left user_list_width
 
-.chat_container
-  max-height 250px
-  min-height 250px
+.container-fluid
+  min-width 300px
 
 .headroom
   margin-top 30px 
@@ -27,11 +23,17 @@ body
 #chat_window
   overflow-y scroll
   overflow-x auto
-  max-height 250px
-  min-height 250px
+  max-height chat_window_height
+  min-height chat_window_height
 
 .connect
   color green
 
 .disconnect
   color red
+
+.thumbnail
+  height 160px
+
+a.new_img
+  border 1px solid yellow

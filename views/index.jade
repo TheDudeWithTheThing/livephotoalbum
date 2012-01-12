@@ -1,27 +1,30 @@
-div.container.chat_container
-  div.container-fluid
-    div.sidebar
-      ul.unstyled.user_list
-        each u in users
-          li(id='u#{u.user_id}') #{u.name}
-    div#chat_window.content
-
 div.container
   div.row
-    label.span1 Chats: 
-    input(type="text", name="chat_msg", id="chat_msg", class="span8", placeholder="Chat! press return to send") 
-  div.row.headroom
-    label.span1 URL to image: 
-    input(type="text", class="span8", name="url", id="url")
-    button(class="span2 btn primary", id="go_button", value="Go!") Go!
+    div.span9
+      div.row
+        div.container-fluid
+          div.sidebar
+            ul.unstyled.user_list
+              each u in users
+                li(id='u#{u.user_id}') #{u.name}
+          div#chat_window.content
+      div.row
+        input(type="text", name="chat_msg", id="chat_msg", class="span8", placeholder="Chat! press return to send") 
 
-hr.headroom
+    div.span7
+      div.row
+        label.span2 URL to image: 
+        input(type="text", class="span3", name="url", id="url")
+        button(class="span2 btn primary", id="go_button", value="Go!") Go!
 
-p.left-pad
-  ul.media-grid
-    each img in images
-      li
-        a(href="#{img.src}", title="Added by #{img.owner}")
-          img(class="thumbnail span2",src="#{img.src}")
+      hr.headroom
+
+      ul.media-grid
+        each img in images
+          li
+            a(href="#{img.src}", title="Added by #{img.owner}", class="span2")
+              img(class="thumbnail", src="#{img.src}")
 
 script(type="text/javascript") var socket = io.connect('#{conf.hostname}');
+
+
