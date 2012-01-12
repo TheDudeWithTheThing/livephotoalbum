@@ -11,6 +11,7 @@ module.exports = {
     }
   },
   hostname: 'your hostname',
+  port: 3000,
   fb: {
         appId: 'fp app id',
         appSecret: 'fp app secret'
