@@ -2,9 +2,20 @@ div.topbar
   div.fill
     div.container
       a(href="/", class="brand") Live Photo Album
+
       ul.nav
-        li
-          - if (!everyauth.loggedIn)
-            a(href="/login") Login
-          else
+        - if (!everyauth.loggedIn)
+          li 
+            a Login with:
+          li#facebook
+            a(href='/auth/facebook')
+              img(src='/img/facebook.png')
+          li#twitter
+            a(href='/auth/twitter')
+              img(src='/img/twitter.png')
+          li#google
+            a(href='/auth/google')
+              img(src='/img/google.png')
+        else
+          li
             a(href="/logout") Logout #{everyauth.user.display_name}

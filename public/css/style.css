@@ -1,5 +1,5 @@
 body {
-  padding: 60px 20px 0px 20px;
+  padding: 66px 20px 0px 20px;
 }
 .header {
   margin-bottom: 20px;
@@ -34,4 +34,7 @@ body {
 }
 a.new_img {
   border: 1px solid #ff0;
+}
+.topbar {
+  height: 56px;
 }

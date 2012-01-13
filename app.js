@@ -1,28 +1,28 @@
-var conf = require('./conf'),
-    express = require('express'), 
-    mongoose = require('mongoose'), 
-    mongooseAuth = require('mongoose-auth'), 
-    mongoStore = require('./lib/mongostore'),
-    userSchema = require('./model/user'), 
-    pictureSchema = require('./model/picture'),
-    currentUserSchema = require('./model/current_user'),
-    fs = require('fs'), 
-    path = require('path'), 
-    dateformat = require('dateformat'),
-    form = require('connect-form');
+var conf = require('./conf')
+  , express = require('express')
+  , mongoose = require('mongoose')
+  , mongooseAuth = require('mongoose-auth')
+  , mongoStore = require('./lib/mongostore')
+  , userSchema = require('./model/user')
+  , pictureSchema = require('./model/picture')
+  , currentUserSchema = require('./model/current_user')
+  , fs = require('fs')
+  , path = require('path')
+  , dateformat = require('dateformat')
+  , form = require('connect-form');
 
 var app = express.createServer(
-          form({ keepExtensions: true }),
-          express.cookieParser(), 
-          express.session({ secret: 'itsasecrettoeverybody', cookie : { maxAge: 14400000 }, store: mongoStore}),
-          mongooseAuth.middleware(), 
-          express['static']( __dirname + "/public"),
-          express.logger()),
-    io = require('socket.io').listen(app),
-    db = mongoose.createConnection('mongodb://'+conf.db.host + '/' + conf.db.schema),
-    userFactory = db.model('User', userSchema),
-    pictureFactory = db.model('Picture', pictureSchema),
-    currentUserFactory = db.model('CurrentUser', currentUserSchema);
+            form({ keepExtensions: true })
+          , express.cookieParser()
+          , express.session({ secret: 'itsasecrettoeverybody', cookie : { maxAge: 14400000 }, store: mongoStore})
+          , mongooseAuth.middleware()
+          , express['static']( __dirname + "/public")
+          , express.logger())
+  , io = require('socket.io').listen(app)
+  , db = mongoose.createConnection('mongodb://'+conf.db.host + '/' + conf.db.schema)
+  , userFactory = db.model('User', userSchema)
+  , pictureFactory = db.model('Picture', pictureSchema)
+  , currentUserFactory = db.model('CurrentUser', currentUserSchema);
 
 app.configure(function() {
   app.set('view engine', 'jade');
@@ -56,29 +56,26 @@ app.get('/logout', function(req, res) {
 
 app.post('/add_image', function(req, res) {
 
-  req.form.complete(function(err, fields, files){
+  req.form.complete(function(err, fields, files) {
     if (err) {
       next(err);
     } else {
 
-      if (files.upload)
-      {
-        var filename = files.upload.name;
-
-        var url_path = '/img/uploads/' + filename;
-        var src_path = files.upload.path;
-        var target_path = __dirname + '/public/img/uploads/' + filename;
+      if (files.upload) {
+        var filename = files.upload.name
+          , url_path = '/img/uploads/' + filename
+          , src_path = files.upload.path
+          , target_path = __dirname + '/public/img/uploads/' + filename
+          , newPic = new pictureFactory({src: url_path});
 
         fs.renameSync(src_path, target_path);
 
-        var newPic = new pictureFactory({src: url_path});
         newPic.save(function(err) {
           if(err) { console.log(err); } 
           res.redirect('/');
         });
       }
-      else
-      {
+      else {
         var imgURL = fields.url;
       }
     }
@@ -97,23 +94,24 @@ io.configure('production', function(){
   io.enable('browser client gzip');          // gzip the file
   io.set('log level', 1);                    // reduce logging
   io.set('transports', [                     // enable all transports (optional if you want flashsocket)
-    'websocket', 
-    'htmlfile',
-    'xhr-polling',
-    'jsonp-polling'
+      'websocket' 
+    , 'htmlfile'
+    , 'xhr-polling'
+    , 'jsonp-polling'
     ]);
 });
 
 
 io.sockets.on('connection', function(socket) {
-  var session = socket.handshake.session;
-  var user = socket.handshake.user;
+  var session = socket.handshake.session
+    , user = socket.handshake.user;
 
   // someone connected, need to add to list
-  if (session.auth && session.auth.loggedIn)
-  {
+  if (session.auth && session.auth.loggedIn) {
+
     currentUserFactory.find({user_id: user._id}).run( function(err, foundUser) {
       if(!foundUser.length) {
+
         var currentUser = new currentUserFactory({name: user.display_name, user_id: user._id});
         currentUser.save( function(err) {
           if(err) console.log(err);
@@ -141,9 +139,9 @@ io.sockets.on('connection', function(socket) {
       return;
     }
     if (session.auth && session.auth.loggedIn) {
-      var d = {src: data, owner: user.display_name};
+      var d = {src: data, owner: user.display_name}
+        , newPic = new pictureFactory(d);
 
-      var newPic = new pictureFactory(d);
       newPic.save(function(err) {
         if(err) { console.log(err); } 
       });
@@ -160,8 +158,7 @@ io.sockets.on('connection', function(socket) {
   });
 
   socket.on('chat_rcv', function(data) {
-    if (data !== '')
-    {
+    if (data !== '') {
       if(session.auth && session.auth.loggedIn) {
         socket.broadcast.emit('chat_send', {user: user.display_name, msg: data});
         socket.emit('chat_send', {user: user.display_name, msg: data});
@@ -185,13 +182,11 @@ io.set('authorization', function (data, accept) {
       if(err || !session) {
         console.log('### session not valid');
         accept('Not Authenticated Error', false);
-      }
-      else {
+      } else {
         data.session = session;
         for (var u in session.auth) {
           var userId = session.auth.userId;
         }
-
         userFactory.findById(userId, function(err, user) {
           if (err) {
             console.log('###');
