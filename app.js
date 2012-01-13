@@ -91,6 +91,20 @@ app.post('/add_image', function(req, res) {
 
 var parseCookie = require('connect').utils.parseCookie;
 
+io.configure('production', function(){
+  io.enable('browser client minification');  // send minified client
+  io.enable('browser client etag');          // apply etag caching logic based on version number
+  io.enable('browser client gzip');          // gzip the file
+  io.set('log level', 1);                    // reduce logging
+  io.set('transports', [                     // enable all transports (optional if you want flashsocket)
+    'websocket', 
+    'htmlfile',
+    'xhr-polling',
+    'jsonp-polling'
+    ]);
+});
+
+
 io.sockets.on('connection', function(socket) {
   var session = socket.handshake.session;
   var user = socket.handshake.user;
