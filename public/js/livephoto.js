@@ -1,5 +1,10 @@
 function addImage( d ) {
-    $('.media-grid').children(':first').before('<li><a class="span2 new_img" href="' + d.src + '" title="Added by ' + d.owner + '"><img class="thumbnail" src="' + d.src + '"/></a></li>');
+  var s = '<li><a class="span2 new_img" href="' + d.src + '" title="Added by ' + d.owner + '"><img class="thumbnail" src="' + d.src + '"/></a></li>';
+  if($('.media-grid').children().length) {
+    $('.media-grid').children(':first').before(s);
+  } else {
+    $('.media-grid').append(s);
+  }
 }
 
 function addUser( u ) {
