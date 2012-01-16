@@ -49,6 +49,6 @@ Install locally
 
   I also use nodemon to watch the app.js file and restart the server on changes
 
-  `npm install nodemon`
+  `npm install -g nodemon`
 
   `nodemon app.js`
