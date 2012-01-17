@@ -9,8 +9,11 @@
       "url": "git://github.com/TheDudeWithTheThing/livephotoalbum.git"
     },
     "dependencies": {
+      "bcrypt" : "0.4.1",
       "connect": ">=1.8.5",
       "connect-form": ">=0.2.1",
+      "connect-mongodb": "1.1.2",
+      "dateformat": "1.0.2-1.2.3",
       "everyauth": ">=0.2.28",
       "express": ">=2.5.1",
       "jade": ">=0.20.0",

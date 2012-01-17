@@ -46,3 +46,9 @@ Install locally
   And then to watch the .styl file and compile to public dir use the command 
 
   `stylus -w stylus/ -o public/css`
+
+  I also use nodemon to watch the app.js file and restart the server on changes
+
+  `npm install -g nodemon`
+
+  `nodemon app.js`
