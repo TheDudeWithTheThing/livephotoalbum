@@ -1,9 +1,17 @@
 function addImage( d ) {
   var s = '<li><a class="span2 new_img" href="' + d.src + '" title="Added by ' + d.owner + '"><img class="thumbnail" src="' + d.src + '"/></a></li>';
-  if($('.media-grid').children().length) {
-    $('.media-grid').children(':first').before(s);
+
+  var media_grid = $('.media-grid');
+
+  // we want to limit to 9 images, remove last one then add new one
+  if(media_grid.children().length > 8) {
+    media_grid.children(':last').remove();
+  }
+
+  if(media_grid.children().length) {
+    media_grid.children(':first').before(s);
   } else {
-    $('.media-grid').append(s);
+    media_grid.append(s);
   }
 }
 
@@ -18,12 +26,13 @@ function removeUser(u) {
 }
 
 function addChat(msg, styl) {
-  $('#chat_window').append('<span class="' + styl + '">' + msg + '</span><br/>');
-  $('#chat_window').scrollTop( $('#chat_window').prop('scrollHeight') );
+  var chat_window = $('#chat_window');
+  chat_window.append('<span class="' + styl + '">' + msg + '</span><br/>');
+  chat_window.scrollTop( chat_window.prop('scrollHeight') );
 }
 
 function refreshLightbox() {
-  $('.media-grid a').lightBox({imageLoading: '/img/lightbox-ico-loading.gif', 
+  $('.media-grid').find('a').lightBox({imageLoading: '/img/lightbox-ico-loading.gif', 
                                imageBtnClose: '/img/lightbox-btn-close.gif',
                                imageBtnNext: '/img/lightbox-btn-next.gif',
                                imageBtnPrev: '/img/lightbox-btn-prev.gif',
@@ -51,12 +60,8 @@ $(document).ready( function() {
       refreshLightbox();
     });
 
-    socket.on('not_logged_in', function() {
-      alertMessage("Not logged in");
-    });
-
-    socket.on('no_data', function() {
-      alertMessage("Enter some datas");
+    socket.on('error', function(data) {
+      alertMessage(data);
     });
 
     socket.on('connect_rcv', function(user) {
@@ -75,20 +80,22 @@ $(document).ready( function() {
     });
 
     $('#go_button').click( function(ev) {
+      var url = $('#url');
       $('.alert-message').remove();
-      var img = $('#url').val();
+      var img = url.val();
       socket.emit('get_pic', img);
-      $('#url').val('');
+      url.val('');
     });
 
-    $('#chat_msg').keydown( function(ev) {
+    var chat_message = $('#chat_msg');
+    chat_message.keydown( function(ev) {
       // return pressed
       if (ev.which == '13')
       {
         $('.alert-message').remove();
-        var chats = $('#chat_msg').val();
+        var chats = chat_message.val();
         socket.emit('chat_rcv', chats);
-        $('#chat_msg').val('');
+        chat_message.val('');
       }
     });
 

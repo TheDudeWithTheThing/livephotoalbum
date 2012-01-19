@@ -24,7 +24,7 @@ UserSchema.plugin(mongooseAuth, {
            myHostname: conf.hostname,
            appId: conf.fb.appId,
            appSecret: conf.fb.appSecret,
-           redirectPath: '/'
+           redirectPath: conf.path
       }
     },
     twitter: {
@@ -32,7 +32,7 @@ UserSchema.plugin(mongooseAuth, {
           myHostname: conf.hostname,
           consumerKey: conf.twit.consumerKey,
           consumerSecret: conf.twit.consumerSecret,
-          redirectPath: '/'
+          redirectPath: conf.path
       }
     },
     google: {
@@ -41,7 +41,7 @@ UserSchema.plugin(mongooseAuth, {
         appId: conf.google.clientId,
         appSecret: conf.google.clientSecret,
         scope: conf.google.scope,
-        redirectPath: '/'
+        redirectPath: conf.path
       }
     }
 });

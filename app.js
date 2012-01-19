@@ -33,9 +33,8 @@ app.configure('development', function() {
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
-
 app.get('/', function(req, res) {
-  pictureFactory.find({}).sort('createdAt', -1).limit(10).run(function(err, images) {
+  pictureFactory.find({}).sort('createdAt', -1).limit(9).run(function(err, images) {
     if (err) console.log(err);
 
     currentUserFactory.find({}).run(function(err, users) {
@@ -44,6 +43,19 @@ app.get('/', function(req, res) {
     });
   });
 });
+
+
+app.get('/livephotoalbum', function(req, res) {
+  pictureFactory.find({}).sort('createdAt', -1).limit(9).run(function(err, images) {
+    if (err) console.log(err);
+
+    currentUserFactory.find({}).run(function(err, users) {
+      if (err) console.log(err);
+      res.render('index', {title : 'Home Page', images: images, conf: conf, users: users });
+    });
+  });
+});
+
 
 app.get('/login', function(req, res) {
   res.render('login', {title: 'Login'});
@@ -135,7 +147,7 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('get_pic', function(data) {
     if (!data) {
-      socket.emit('no_data');
+      socket.emit('error', "No Data");
       return;
     }
     if (session.auth && session.auth.loggedIn) {
@@ -143,17 +155,22 @@ io.sockets.on('connection', function(socket) {
         , newPic = new pictureFactory(d);
 
       newPic.save(function(err) {
-        if(err) { console.log(err); } 
+        // error saving, avoid broadcasting a fail save image
+        if(err) { console.log(err); return; } 
+      
+        // adds to list
+        socket.broadcast.emit('new_pic', d);
+        socket.emit('new_pic', d);
+
+        // grab just the file name from the URL for putting in a chat message
+        var img_name = data.match(/[\w_.-]*?(?=\?)|[\w_.-]*$/);
+
+        socket.broadcast.emit('chat_send', {user: user.display_name, msg: 'just uploaded photo ' + img_name});
+        socket.emit('chat_send', {user: user.display_name, msg: 'just uploaded photo ' + img_name});
       });
-
-      socket.broadcast.emit('new_pic', d);
-      socket.emit('new_pic', d);
-
-      socket.broadcast.emit('chat_send', {user: user.display_name, msg: 'just uploaded photo ' + data});
-      socket.emit('chat_send', {user: user.display_name, msg: 'just uploaded photo ' + data});
     } 
     else {
-      socket.emit('not_logged_in');
+      socket.emit('error', 'Not Logged In');
     }
   });
 
@@ -164,11 +181,10 @@ io.sockets.on('connection', function(socket) {
         socket.emit('chat_send', {user: user.display_name, msg: data});
       }
       else {
-        socket.emit('not_logged_in');
+        socket.emit('error', "Not Logged In");
       }
-    }
-    else {
-      socket.emit('no_data');
+    } else {
+      socket.emit('error', "No Data");
     }
   });
 });
