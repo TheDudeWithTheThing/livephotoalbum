@@ -7,10 +7,12 @@ Install locally
 ---------------
 
 ### node v4
+
   `git clone https://github.com/joyent/node.git`
 
   `cd node`
 
+(I've actually tried with node v0.6 and everything seems ok except for the warning that sys is now util, so use v0.6 if you like)
   `git checkout v0.4`
 
   `configure && make && sudo make install`
