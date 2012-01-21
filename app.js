@@ -1,4 +1,4 @@
-var conf = require('./conf')
+var conf = require('./conf') 
   , express = require('express')
   , mongoose = require('mongoose')
   , mongooseAuth = require('mongoose-auth')
@@ -6,10 +6,9 @@ var conf = require('./conf')
   , userSchema = require('./model/user')
   , pictureSchema = require('./model/picture')
   , currentUserSchema = require('./model/current_user')
-  , fs = require('fs')
-  , path = require('path')
-  , dateformat = require('dateformat')
-  , form = require('connect-form');
+  , fs = require('fs') // used for writing POSTed pics to fs
+  , path = require('path') // used for POSTed pics
+  , form = require('connect-form');  // used for POSTed pics
 
 var app = express.createServer(
             form({ keepExtensions: true })
@@ -29,10 +28,12 @@ app.configure(function() {
   app.set('views', __dirname+'/views');
 });
 
+// dump errors in dev environment
 app.configure('development', function() {
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
+// root
 app.get('/', function(req, res) {
   pictureFactory.find({}).sort('createdAt', -1).limit(9).run(function(err, images) {
     if (err) console.log(err);
@@ -44,7 +45,7 @@ app.get('/', function(req, res) {
   });
 });
 
-
+// eventual perm home once I finish home page
 app.get('/livephotoalbum', function(req, res) {
   pictureFactory.find({}).sort('createdAt', -1).limit(9).run(function(err, images) {
     if (err) console.log(err);
@@ -56,16 +57,13 @@ app.get('/livephotoalbum', function(req, res) {
   });
 });
 
-
-app.get('/login', function(req, res) {
-  res.render('login', {title: 'Login'});
-});
-
 app.get('/logout', function(req, res) {
   req.logout();
-  res.redirect('/');
+  //res.redirect(conf.path);
 });
 
+
+// added for adding actual images not just URLs
 app.post('/add_image', function(req, res) {
 
   req.form.complete(function(err, fields, files) {
@@ -93,9 +91,6 @@ app.post('/add_image', function(req, res) {
     }
   });
 
-  // get and save image to fs
-  // save to db
-  // trigger socket message with image info
 });
 
 var parseCookie = require('connect').utils.parseCookie;
@@ -118,7 +113,7 @@ io.sockets.on('connection', function(socket) {
   var session = socket.handshake.session
     , user = socket.handshake.user;
 
-  // someone connected, need to add to list
+  // someone connected, need to add to current user list
   if (session.auth && session.auth.loggedIn) {
 
     currentUserFactory.find({user_id: user._id}).run( function(err, foundUser) {
@@ -137,9 +132,10 @@ io.sockets.on('connection', function(socket) {
 
   socket.on('disconnect', function() {
     if (session.auth && session.auth.loggedIn) {
+      // on disconnect remove from current user list
       currentUserFactory.remove({user_id: user._id}, function(err) {
         if(err) console.log(err);
-
+        // tell clients this user disconnected
         socket.broadcast.emit('disconnect_rcv', {id: 'u' + user._id, name: user.display_name});
       });
     }
@@ -165,11 +161,11 @@ io.sockets.on('connection', function(socket) {
         // grab just the file name from the URL for putting in a chat message
         var img_name = data.match(/[\w_.-]*?(?=\?)|[\w_.-]*$/);
 
+        // broadcast to users and self
         socket.broadcast.emit('chat_send', {user: user.display_name, msg: 'just uploaded photo ' + img_name});
         socket.emit('chat_send', {user: user.display_name, msg: 'just uploaded photo ' + img_name});
       });
-    } 
-    else {
+    } else {
       socket.emit('error', 'Not Logged In');
     }
   });
@@ -218,6 +214,6 @@ io.set('authorization', function (data, accept) {
 });
 
 mongooseAuth.helpExpress(app);
-console.log("running");
+console.log("running on port " + conf.port);
 
 app.listen(conf.port);

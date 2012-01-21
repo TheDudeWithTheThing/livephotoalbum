@@ -16,7 +16,8 @@ UserSchema.plugin(mongooseAuth, {
       everyauth: {
           User: function () {
             return User;
-          }
+          },
+          logoutRedirectPath: conf.path
       }
     },
     facebook: {
