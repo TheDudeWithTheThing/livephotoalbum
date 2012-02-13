@@ -12,13 +12,16 @@ var conf = require('./conf')
   , form = require('connect-form')  // used for POSTed pics
   , crypto = require('crypto');  // used in benchmark to save garbage data
 
+// need to create token for when proxying for remote address
+express.logger.token('real_ip', function(req, res) { return req.headers['x-forwarded-for'] || req.socket.remoteAddress; });
+
 var app = express.createServer(
             form({ keepExtensions: true })
           , express.cookieParser()
           , express.session({ secret: 'itsasecrettoeverybody', cookie : { maxAge: 14400000 }, store: mongoStore})
           , mongooseAuth.middleware()
           , express['static']( __dirname + "/public")
-          , express.logger())
+          , express.logger(':real_ip - - [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'))
   , io = require('socket.io').listen(app)
   , db = mongoose.createConnection('mongodb://'+conf.db.host + '/' + conf.db.schema)
   , userFactory = db.model('User', userSchema)
@@ -40,7 +43,7 @@ app.configure('development', function() {
 app.get('/', function(req, res) {
   pictureFactory.find({}).sort('createdAt', -1).limit(9).run(function(err, images) {
     if (err) console.log(err);
-
+  
     currentUserFactory.find({}).run(function(err, users) {
       if (err) console.log(err);
       res.render('index', {title : 'Home Page', images: images, conf: conf, users: users });
