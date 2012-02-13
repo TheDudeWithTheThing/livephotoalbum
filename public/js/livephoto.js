@@ -17,7 +17,6 @@ function addImage( d ) {
 
 function addUser( u ) {
     removeUser(u);
-
     $('.user_list').append('<li id="' + u.id + '">' + u.name + '</li>');
 }
 
@@ -102,4 +101,3 @@ $(document).ready( function() {
     refreshLightbox();
   }
 });
-

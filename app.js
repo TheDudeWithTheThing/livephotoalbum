@@ -6,9 +6,11 @@ var conf = require('./conf')
   , userSchema = require('./model/user')
   , pictureSchema = require('./model/picture')
   , currentUserSchema = require('./model/current_user')
+  , benchmarkSchema = require('./model/benchmark')
   , fs = require('fs') // used for writing POSTed pics to fs
   , path = require('path') // used for POSTed pics
-  , form = require('connect-form');  // used for POSTed pics
+  , form = require('connect-form')  // used for POSTed pics
+  , crypto = require('crypto');  // used in benchmark to save garbage data
 
 var app = express.createServer(
             form({ keepExtensions: true })
@@ -21,7 +23,8 @@ var app = express.createServer(
   , db = mongoose.createConnection('mongodb://'+conf.db.host + '/' + conf.db.schema)
   , userFactory = db.model('User', userSchema)
   , pictureFactory = db.model('Picture', pictureSchema)
-  , currentUserFactory = db.model('CurrentUser', currentUserSchema);
+  , currentUserFactory = db.model('CurrentUser', currentUserSchema)
+  , benchmarkFactory = db.model('Benchmark', benchmarkSchema);
 
 app.configure(function() {
   app.set('view engine', 'jade');
@@ -45,21 +48,35 @@ app.get('/', function(req, res) {
   });
 });
 
-// eventual perm home once I finish home page
-app.get('/livephotoalbum', function(req, res) {
-  pictureFactory.find({}).sort('createdAt', -1).limit(9).run(function(err, images) {
-    if (err) console.log(err);
+app.get('/benchmark_read', function(req, res) {
 
-    currentUserFactory.find({}).run(function(err, users) {
-      if (err) console.log(err);
-      res.render('index', {title : 'Home Page', images: images, conf: conf, users: users });
-    });
+  benchmarkFactory.find({}).limit(10).run( function(err, benches) {
+    res.render('benchmark', {title: 'Bench', values: benches, conf: conf});
+  });
+
+});
+
+app.get('/benchmark_write', function(req, res) {
+
+  var uniq_id = crypto.
+    createHash('md5').
+    update("" + (new Date()).getTime()).
+    digest("hex");
+
+  var newBench = new benchmarkFactory({garbage: uniq_id}); 
+  newBench.save(function(err) {
+    if(err) {
+      console.log(err);
+      res.send(404);
+    }
+
+    res.send('OK!');
   });
 });
 
+// logout for everyauth
 app.get('/logout', function(req, res) {
   req.logout();
-  //res.redirect(conf.path);
 });
 
 
