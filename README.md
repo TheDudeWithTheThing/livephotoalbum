@@ -1,7 +1,7 @@
 Live Photo Album
 ================
 
-Live Photo Album is a chatroom with a live photo gallery where pictures that are posted are seen immediately by all connected users. The main purpose of this project was for me to play around with socket.io. The backend is using node, mongodb and the front end is twitter bootstrap, jquery, jquery-lightbox and jquery.imgCenter. To see a live demo check out <http://www.thedudewiththething.com>.
+Live Photo Album is a chatroom with a live photo gallery where pictures that are posted are seen immediately by all connected users. The main purpose of this project was for me to play around with socket.io. The backend is using node, mongodb and the front end is twitter bootstrap, jquery, jquery-lightbox and jquery.imgCenter.
 
 Install locally
 ---------------
